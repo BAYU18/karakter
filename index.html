@@ -18,7 +18,7 @@ body{
 }
 .card{
   width:100%;
-  max-width:820px;
+  max-width:980px;
   background:#020617cc;
   backdrop-filter:blur(14px);
   border-radius:22px;
@@ -62,12 +62,28 @@ button{
 .yellow{background:#eab308;color:#000}
 .blue{background:#3b82f6}
 .green{background:#22c55e}
-.block{
-  background:#020617aa;
-  border-radius:16px;
-  padding:18px;
-  margin:14px 0;
+
+/* TABLE */
+.table-wrap{
+  overflow-x:auto;
+  margin-top:18px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:900px;
+}
+th,td{
   border:1px solid #1e293b;
+  padding:12px;
+  vertical-align:top;
+}
+th{
+  background:#020617;
+  text-align:left;
+}
+td{
+  background:#020617aa;
 }
 </style>
 </head>
@@ -93,30 +109,98 @@ button{
 <div id="result" class="hidden">
 <h2>Karakter Dominan Kamu</h2>
 <div id="summary"></div>
-<button onclick="showRelation()">Lihat Dampak Hubungan Antar Karakter →</button>
+<button onclick="showRelation()">Lihat Analisis Hubungan Antar Warna →</button>
 </div>
 
 <!-- RELATION -->
 <div id="relation" class="hidden">
-<h2>Kesimpulan Hubungan Antar Karakter</h2>
+<h2>Tabel Lengkap – Potensi Hubungan Antar Warna</h2>
 
-<div class="block"><b>🔴 Merah ↔ 🟡 Kuning</b>
-<p>Kuning lelah emosional, Merah dominan → hubungan satu arah, kreativitas mati.</p></div>
-
-<div class="block"><b>🔴 Merah ↔ 🔵 Biru</b>
-<p>Biru defensif, Merah anti-kritik → keputusan cepat tapi rapuh.</p></div>
-
-<div class="block"><b>🔴 Merah ↔ 🟢 Hijau</b>
-<p>Hijau terus mengalah → damai di luar, rapuh di dalam.</p></div>
-
-<div class="block"><b>🟡 Kuning ↔ 🔵 Biru</b>
-<p>Kuning minder, Biru kaku → ide mati, komunikasi beku.</p></div>
-
-<div class="block"><b>🟡 Kuning ↔ 🟢 Hijau</b>
-<p>Terlalu nyaman tanpa arah → hubungan hangat tapi stagnan.</p></div>
-
-<div class="block"><b>🔵 Biru ↔ 🟢 Hijau</b>
-<p>Takut salah & konflik → stabil tapi tidak maju.</p></div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Pasangan Warna</th>
+<th>Potensi Positif<br>(Jika Dewasa & Sadar)</th>
+<th>Hasil Hubungan Sehat</th>
+<th>Pola Negatif<br>(Jika Tidak Dikelola)</th>
+<th>Apa yang Terjadi Jika Negatif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 Merah × 🔴 Merah</td>
+<td>Power couple, saling dorong prestasi</td>
+<td>Cepat maju, saling hormat</td>
+<td>Adu ego, ingin dominan</td>
+<td>Hubungan intens tapi mudah meledak</td>
+</tr>
+<tr>
+<td>🟡 Kuning × 🟡 Kuning</td>
+<td>Rumah ceria, penuh tawa</td>
+<td>Emosi terbuka, ikatan kuat</td>
+<td>Drama, impulsif</td>
+<td>Naik-turun, tidak stabil</td>
+</tr>
+<tr>
+<td>🔵 Biru × 🔵 Biru</td>
+<td>Stabil, rapi, minim drama</td>
+<td>Aman & konsisten</td>
+<td>Kaku, dingin</td>
+<td>Jauh secara emosional</td>
+</tr>
+<tr>
+<td>🟢 Hijau × 🟢 Hijau</td>
+<td>Damai, empatik, suportif</td>
+<td>Aman emosional</td>
+<td>Menghindari konflik</td>
+<td>Stagnan, keputusan tertunda</td>
+</tr>
+<tr>
+<td>🔴 Merah × 🟡 Kuning</td>
+<td>Visi + semangat</td>
+<td>Keluarga aktif & hidup</td>
+<td>Merah dominan, Kuning sensitif</td>
+<td>Kuning lelah & menarik diri</td>
+</tr>
+<tr>
+<td>🔴 Merah × 🔵 Biru</td>
+<td>Keputusan kuat + kualitas</td>
+<td>Sukses & terarah</td>
+<td>Anti kritik vs kaku</td>
+<td>Perang dingin, tegang</td>
+</tr>
+<tr>
+<td>🔴 Merah × 🟢 Hijau</td>
+<td>Tegas + welas asih</td>
+<td>Pemimpin bijak</td>
+<td>Hijau mengalah terus</td>
+<td>Damai palsu, emosi terpendam</td>
+</tr>
+<tr>
+<td>🟡 Kuning × 🔵 Biru</td>
+<td>Kreatif + logis</td>
+<td>Inovatif & realistis</td>
+<td>Kuning minder, Biru dingin</td>
+<td>Ide mati, komunikasi beku</td>
+</tr>
+<tr>
+<td>🟡 Kuning × 🟢 Hijau</td>
+<td>Hangat & empatik</td>
+<td>Rumah penuh dukungan</td>
+<td>Terlalu nyaman</td>
+<td>Tujuan kabur, stagnan</td>
+</tr>
+<tr>
+<td>🔵 Biru × 🟢 Hijau</td>
+<td>Sistem + harmoni</td>
+<td>Stabil & tahan krisis</td>
+<td>Takut konflik & perubahan</td>
+<td>Aman tapi hambar</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 <button onclick="location.reload()">Ulangi Tes</button>
 </div>
@@ -249,7 +333,7 @@ const questions=[
 ]}
 ];
 
-// acak urutan soal
+// acak soal
 questions.sort(()=>Math.random()-0.5);
 
 let i=0;
@@ -285,7 +369,7 @@ document.getElementById("result").classList.remove("hidden");
 const dominant=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 const map={
 red:["Sanguinis","red","Ekspresif, antusias, komunikatif","Cenderung impulsif"],
-yellow:["Koleris","yellow","Tegas, berorientasi hasil","Bisa dominan"],
+yellow:["Koleris","yellow","Tegas, berorientasi hasil","Cenderung dominan"],
 blue:["Melankolis","blue","Analitis, teliti","Perfeksionis"],
 green:["Plegmatis","green","Tenang, empatik","Cenderung pasif"]
 };
