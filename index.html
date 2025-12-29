@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tes Karakter & Nilai Moral</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Comic Sans MS", Arial;
+  background:linear-gradient(135deg,#a5f3fc,#fde68a);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:10px;
+}
+.app{
+  width:100%;
+  max-width:800px;
+  background:#fff;
+  padding:20px;
+  border-radius:22px;
+  box-shadow:0 15px 30px rgba(0,0,0,.25);
+}
+h1{text-align:center;color:#0ea5e9}
+.question{font-size:clamp(16px,4.5vw,20px);margin:15px 0}
+.option{
+  padding:14px;
+  margin:10px 0;
+  border-radius:16px;
+  background:#e0f2fe;
+  cursor:pointer;
+  transition:.2s;
+}
+.option:hover{background:#bae6fd;transform:scale(1.02)}
+.progress{height:10px;background:#e5e7eb;border-radius:10px;overflow:hidden}
+.bar{height:100%;background:#0ea5e9;width:0%}
+.section{margin-top:15px;padding:15px;border-radius:15px}
+.good{background:#dcfce7}
+.warn{background:#fee2e2}
+.info{background:#e0f2fe}
+button{
+  width:100%;
+  max-width:300px;
+  padding:14px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:16px;
+}
+.start{text-align:center}
+.start button{background:#4ade80}
+.music-btn{background:#38bdf8;color:white;margin-top:8px}
+canvas{max-width:100%}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+  <source src="musik.mp3" type="audio/mpeg">
+</audio>
+
+<div class="app" id="app">
+  <h1>🧭 Tes Karakter & Nilai Moral</h1>
+  <div class="start">
+    <p>Jawablah sesuai yang paling mungkin kamu lakukan 😊</p>
+    <button onclick="startTest()">▶️ Mulai Tes</button>
+  </div>
+</div>
+
+<script>
+const bgm=document.getElementById("bgm");
+function toggleMusic(){ bgm.paused?bgm.play():bgm.pause(); }
+
+const scores={
+  "Kejujuran":0,
+  "Tanggung Jawab":0,
+  "Disiplin":0,
+  "Amanah":0,
+  "Rasa Hormat":0,
+  "Empati":0,
+  "Keadilan":0,
+  "Kerendahan Hati":0,
+  "Keberanian Moral":0
+};
+
+const advice={
+  "Kejujuran":"Latih berkata sesuai fakta meski tidak mudah.",
+  "Tanggung Jawab":"Biasakan menyelesaikan tugas sampai tuntas.",
+  "Disiplin":"Buat jadwal dan patuhi aturan yang ada.",
+  "Amanah":"Latih menepati janji sekecil apa pun.",
+  "Rasa Hormat":"Biasakan mendengar dan menghargai pendapat orang.",
+  "Empati":"Coba pahami perasaan orang lain sebelum bertindak.",
+  "Keadilan":"Latih bersikap adil dan tidak memihak.",
+  "Kerendahan Hati":"Biasakan menerima kritik dan mengakui kesalahan.",
+  "Keberanian Moral":"Latih berani melakukan yang benar meski sulit."
+};
+
+let index=0;
+
+const questions=[
+{q:"Jika kamu melakukan kesalahan kecil dan tidak ada yang tahu, kamu akan:",o:{
+ A:["Membetulkannya diam-diam","Tanggung Jawab"],
+ B:["Mengaku jika ditanya","Kejujuran"],
+ C:["Berharap tidak diketahui","Disiplin"],
+ D:["Mencari alasan","Kerendahan Hati"]
+}},
+{q:"Saat diberi tugas kelompok dan waktunya hampir habis:",o:{
+ A:["Tetap menyelesaikan bagianmu","Amanah"],
+ B:["Mengajak teman fokus","Kepemimpinan"],
+ C:["Mengikuti aturan waktu","Disiplin"],
+ D:["Menunggu instruksi","Rasa Hormat"]
+}},
+{q:"Jika dua teman bertengkar:",o:{
+ A:["Mendengarkan keduanya","Keadilan"],
+ B:["Menenangkan mereka","Empati"],
+ C:["Memihak yang dekat","Rasa Hormat"],
+ D:["Menghindari masalah","Kerendahan Hati"]
+}},
+{q:"Saat janji tidak bisa ditepati:",o:{
+ A:["Memberi tahu lebih awal","Amanah"],
+ B:["Mencari pengganti","Tanggung Jawab"],
+ C:["Diam saja","Kejujuran"],
+ D:["Menunda tanpa kabar","Disiplin"]
+}},
+{q:"Jika teman melakukan kesalahan di depan umum:",o:{
+ A:["Menegurnya secara pribadi","Rasa Hormat"],
+ B:["Membelanya","Empati"],
+ C:["Membiarkannya","Kerendahan Hati"],
+ D:["Mengatakan yang benar","Keberanian Moral"]
+}},
+{q:"Ketika aturan terasa tidak adil:",o:{
+ A:["Tetap mematuhinya","Disiplin"],
+ B:["Menyampaikan dengan sopan","Keberanian Moral"],
+ C:["Mengajak diskusi","Keadilan"],
+ D:["Mengikuti arus","Kerendahan Hati"]
+}},
+{q:"Jika mendapatkan pujian:",o:{
+ A:["Berterima kasih","Rasa Hormat"],
+ B:["Mengakui bantuan orang lain","Kerendahan Hati"],
+ C:["Bangga sendiri","Kejujuran"],
+ D:["Diam saja","Empati"]
+}},
+{q:"Saat melihat barang bukan milikmu tertinggal:",o:{
+ A:["Mengembalikan","Kejujuran"],
+ B:["Menitipkan ke pihak berwenang","Amanah"],
+ C:["Mencari pemiliknya","Tanggung Jawab"],
+ D:["Membiarkannya","Kerendahan Hati"]
+}},
+{q:"Jika diminta memilih dalam kelompok:",o:{
+ A:["Memilih yang paling adil","Keadilan"],
+ B:["Memikirkan perasaan semua","Empati"],
+ C:["Mengikuti keputusan bersama","Rasa Hormat"],
+ D:["Menghindari memilih","Kerendahan Hati"]
+}},
+{q:"Saat berbeda pendapat dengan mayoritas:",o:{
+ A:["Menyampaikan dengan sopan","Keberanian Moral"],
+ B:["Mengalah","Rasa Hormat"],
+ C:["Diam","Kerendahan Hati"],
+ D:["Mencari jalan tengah","Keadilan"]
+}},
+{q:"Jika tugas terasa berat:",o:{
+ A:["Menyicil sedikit demi sedikit","Disiplin"],
+ B:["Meminta bantuan","Empati"],
+ C:["Tetap mengerjakan","Tanggung Jawab"],
+ D:["Menunda","Kerendahan Hati"]
+}},
+{q:"Saat dipercaya memegang sesuatu:",o:{
+ A:["Menjaganya baik-baik","Amanah"],
+ B:["Melaporkan kondisinya","Kejujuran"],
+ C:["Mengikuti aturan","Disiplin"],
+ D:["Menyerahkannya ke orang lain","Rasa Hormat"]
+}},
+{q:"Jika melihat ketidakadilan kecil:",o:{
+ A:["Mengingatkan dengan baik","Keberanian Moral"],
+ B:["Membela yang dirugikan","Empati"],
+ C:["Mengajak bicara","Keadilan"],
+ D:["Diam","Kerendahan Hati"]
+}},
+{q:"Saat membuat kesalahan:",o:{
+ A:["Mengaku","Kejujuran"],
+ B:["Memperbaiki","Tanggung Jawab"],
+ C:["Menerima kritik","Kerendahan Hati"],
+ D:["Mengikuti aturan","Disiplin"]
+}},
+{q:"Jika diminta pendapat:",o:{
+ A:["Jujur tapi sopan","Kejujuran"],
+ B:["Memikirkan dampaknya","Empati"],
+ C:["Mengikuti norma","Rasa Hormat"],
+ D:["Menyampaikan meski berbeda","Keberanian Moral"]
+}},
+{q:"Saat bekerja dengan orang baru:",o:{
+ A:["Menghargai kebiasaannya","Rasa Hormat"],
+ B:["Mendengarkan dulu","Empati"],
+ C:["Menepati kesepakatan","Amanah"],
+ D:["Mengikuti aturan","Disiplin"]
+}},
+{q:"Jika ada kesalahpahaman:",o:{
+ A:["Meluruskan fakta","Kejujuran"],
+ B:["Mencari solusi","Tanggung Jawab"],
+ C:["Menjaga perasaan","Empati"],
+ D:["Menyampaikan yang benar","Keberanian Moral"]
+}},
+{q:"Saat mendapat amanah besar:",o:{
+ A:["Berhati-hati","Amanah"],
+ B:["Menyusun rencana","Disiplin"],
+ C:["Bertanya jika ragu","Kerendahan Hati"],
+ D:["Melaksanakannya","Tanggung Jawab"]
+}},
+{q:"Jika aturan dilanggar orang lain:",o:{
+ A:["Mengingatkan dengan sopan","Rasa Hormat"],
+ B:["Melaporkan jika perlu","Keberanian Moral"],
+ C:["Menilai secara adil","Keadilan"],
+ D:["Menasehati","Empati"]
+}},
+{q:"Jika pendapatmu salah:",o:{
+ A:["Mengaku dan belajar","Kerendahan Hati"],
+ B:["Memperbaiki","Tanggung Jawab"],
+ C:["Menerima masukan","Rasa Hormat"],
+ D:["Tetap jujur","Kejujuran"]
+}}
+];
+
+// random
+questions.sort(()=>Math.random()-0.5);
+
+function startTest(){
+  bgm.volume=0.4;
+  bgm.play();
+  index=0;
+  loadQuestion();
+}
+
+function loadQuestion(){
+  app.innerHTML=`
+    <h1>🧭 Tes Karakter & Nilai Moral</h1>
+    <div class="question">${index+1}. ${questions[index].q}</div>
+    <div id="options"></div>
+    <div class="progress"><div class="bar" style="width:${index/questions.length*100}%"></div></div>
+    <button class="music-btn" onclick="toggleMusic()">🔊 Musik ON / OFF</button>
+  `;
+  const opt=document.getElementById("options");
+  for(let k in questions[index].o){
+    const d=document.createElement("div");
+    d.className="option";
+    d.innerText=k+". "+questions[index].o[k][0];
+    d.onclick=()=>{scores[questions[index].o[k][1]]++;index++;index<questions.length?loadQuestion():showResult();}
+    opt.appendChild(d);
+  }
+}
+
+function showResult(){
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  app.innerHTML=`
+    <h1>📊 Hasil Tes Karakter</h1>
+    <canvas id="chart"></canvas>
+    <div class="section good">⭐ <b>Kekuatan Karakter:</b><br>${sorted[0][0]}</div>
+    <div class="section warn">⚠️ <b>Perlu Dikembangkan:</b><br>${sorted[sorted.length-1][0]}</div>
+    <div class="section info">🛠️ <b>Saran:</b><br>${advice[sorted[sorted.length-1][0]]}</div>
+  `;
+  new Chart(chart,{
+    type:"radar",
+    data:{labels:Object.keys(scores),datasets:[{data:Object.values(scores),backgroundColor:"rgba(14,165,233,.4)",borderColor:"#0ea5e9"}]},
+    options:{scales:{r:{beginAtZero:true,max:5}}}
+  });
+}
+</script>
+
+</body>
+</html>
